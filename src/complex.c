@@ -1,114 +1,31 @@
 #include "../include/complex.h"
-#include <stdlib.h>
 #include <math.h>
-
-// STRUCT
-
-struct complex_t{
-   double a;
-   double b;
-};
 
 // FUNCTION DEFINITION
 
-ComplexNbr *new_complex(double a, double b){
-   ComplexNbr *c = malloc(sizeof(ComplexNbr));
-   if(!c)
-      return NULL;
-   ErrorCode errorCode = set_complex(c, a, b);
-   if(errorCode != SUCCESS){
-      free_complex(c);
-      return NULL;
-   }
-   return c;
+ComplexNbr add_complex(ComplexNbr z1, ComplexNbr z2){
+   return (ComplexNbr){z1.re + z2.re, z1.im + z2.im};
 }
 
-ComplexNbr *empty_complex(void){
-   return new_complex(0,0);
+ComplexNbr sub_complex(ComplexNbr z1, ComplexNbr z2){
+   return (ComplexNbr){z1.re - z2.re, z1.im - z2.im};
 }
 
-ErrorCode set_complex(ComplexNbr *z, double a, double b){
-   if(!z)
-      return ERR_NULL_PTR;
-   z->a = a;
-   z->b = b;
-   return SUCCESS;
+ComplexNbr mul_complex(ComplexNbr z1, ComplexNbr z2){
+   return (ComplexNbr){z1.re * z2.re - z1.im * z2.im, z1.re * z2.im + z1.im *z2.re};
 }
 
-void free_complex(ComplexNbr *z){
-   if(z)
-      free(z);
-}
-
-double real(ComplexNbr *z){
-   if(!z)
-      return NAN;
-   return z->a;
-}
-
-double img(ComplexNbr *z){
-   if(!z)
-      return NAN;
-   return z->b;
-}
-
-ErrorCode add_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
-   if(!(res && z1 && z2))
-      return ERR_NULL_PTR;
-   ErrorCode errorCode = set_complex(res, real(z1) + real(z2), img(z1) + img(z2));
-   return errorCode;
-}
-
-ErrorCode sub_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
-   if(!(res && z1 && z2))
-      return ERR_NULL_PTR;
-   ErrorCode errorCode = set_complex(res, real(z1) - real(z2), img(z1) - img(z2));
-   return errorCode;
-}
-
-ErrorCode mul_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
-   if(!(res && z1 && z2))
-      return ERR_NULL_PTR;
-   ErrorCode errorCode = set_complex(res, real(z1) * real(z2) - img(z1) * img(z2), real(z1) * img(z2) + img(z1) * real(z2));
-   return errorCode;
-}
-
-ErrorCode div_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
-   if(!(res && z1 && z2))
-      return ERR_NULL_PTR;
-   ErrorCode errorCode;
-
+ComplexNbr div_complex(ComplexNbr z1, ComplexNbr z2){
    double z2Mod = modulus(z2);
-   ComplexNbr *z2Conj = empty_complex();
-   if(!z2Conj)
-      return ERR_ALLOCATION_FAIL;
-   errorCode = conjugate(z2Conj, z2);
-   if(errorCode != SUCCESS)
-      return errorCode;
-   ComplexNbr *num = empty_complex();
-   if(!num)
-      return ERR_ALLOCATION_FAIL;
-   errorCode = mul_complex(num, z1, z2Conj);
-   if(errorCode != SUCCESS)
-      return errorCode;
-
-   errorCode = set_complex(res, real(num)/(z2Mod * z2Mod), img(num)/(z2Mod * z2Mod));
-
-   free_complex(z2Conj);
-   free_complex(num);
-
-   return errorCode;
+   ComplexNbr z2Conj = conjugate(z2);
+   ComplexNbr num = mul_complex(z1, z2Conj);
+   return (ComplexNbr){num.re/(z2Mod * z2Mod), num.im/(z2Mod * z2Mod)};
 }
 
-ErrorCode conjugate(ComplexNbr *res, ComplexNbr *z){
-   if(!(res && z))
-      return ERR_NULL_PTR;
-   ErrorCode errorCode = set_complex(res, real(z), -1 * img(z));
-   return errorCode;
+ComplexNbr conjugate(ComplexNbr z){
+   return (ComplexNbr){z.re, -z.im};
 }
 
-double modulus(ComplexNbr *z){
-   if(!z)
-      return NAN;
-   return sqrt(real(z) * real(z) + img(z) * img(z));
+double modulus(ComplexNbr z){
+   return sqrt(z.re * z.re + z.im * z.im);
 }

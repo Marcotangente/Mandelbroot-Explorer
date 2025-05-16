@@ -3,6 +3,7 @@
 		"math.h": "c",
 		"raylib.h": "c",
 		"resource_dir.h": "c",
-		"complex.h": "c"
+		"complex.h": "c",
+		"complex": "c"
 	}
 }
