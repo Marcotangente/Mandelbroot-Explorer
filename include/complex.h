@@ -27,6 +27,17 @@ ComplexNbr *new_complex(double a, double b);
 ComplexNbr *empty_complex(void);
 
 /**
+ * \brief Modify a complex.
+ * 
+ * \param z The complex to modify.
+ * \param a The new real part.
+ * \param b The new imaginary part.
+ * 
+ * \return An ErrorCode. 
+ */
+ErrorCode set_complex(ComplexNbr *z, double a, double b);
+
+/**
  * \brief Destroys a complex and free the memory.
  * 
  * \param z The complex to free.

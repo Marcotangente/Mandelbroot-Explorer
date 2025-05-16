@@ -15,13 +15,24 @@ ComplexNbr *new_complex(double a, double b){
    ComplexNbr *c = malloc(sizeof(ComplexNbr));
    if(!c)
       return NULL;
-   c->a = a;
-   c->b = b;
+   ErrorCode errorCode = set_complex(c, a, b);
+   if(errorCode != SUCCESS){
+      free_complex(c);
+      return NULL;
+   }
    return c;
 }
 
 ComplexNbr *empty_complex(void){
    return new_complex(0,0);
+}
+
+ErrorCode set_complex(ComplexNbr *z, double a, double b){
+   if(!z)
+      return ERR_NULL_PTR;
+   z->a = a;
+   z->b = b;
+   return SUCCESS;
 }
 
 void free_complex(ComplexNbr *z){
@@ -44,25 +55,22 @@ double img(ComplexNbr *z){
 ErrorCode add_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
    if(!(res && z1 && z2))
       return ERR_NULL_PTR;
-   res->a = real(z1) + real(z2);
-   res->b = img(z1) + img(z2);
-   return SUCCESS;
+   ErrorCode errorCode = set_complex(res, real(z1) + real(z2), img(z1) + img(z2));
+   return errorCode;
 }
 
 ErrorCode sub_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
    if(!(res && z1 && z2))
       return ERR_NULL_PTR;
-   res->a = real(z1) - real(z2);
-   res->b = img(z1) - img(z2);
-   return SUCCESS;
+   ErrorCode errorCode = set_complex(res, real(z1) - real(z2), img(z1) - img(z2));
+   return errorCode;
 }
 
 ErrorCode mul_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
    if(!(res && z1 && z2))
       return ERR_NULL_PTR;
-   res->a = real(z1) * real(z2) - img(z1) * img(z2);
-   res->b = real(z1) * img(z2) + img(z1) * real(z2);
-   return SUCCESS;
+   ErrorCode errorCode = set_complex(res, real(z1) * real(z2) - img(z1) * img(z2), real(z1) * img(z2) + img(z1) * real(z2));
+   return errorCode;
 }
 
 ErrorCode div_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
@@ -84,21 +92,19 @@ ErrorCode div_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2){
    if(errorCode != SUCCESS)
       return errorCode;
 
-   res->a = real(num)/(z2Mod * z2Mod);
-   res->b = img(num)/(z2Mod * z2Mod);
+   errorCode = set_complex(res, real(num)/(z2Mod * z2Mod), img(num)/(z2Mod * z2Mod));
 
    free_complex(z2Conj);
    free_complex(num);
 
-   return SUCCESS;
+   return errorCode;
 }
 
 ErrorCode conjugate(ComplexNbr *res, ComplexNbr *z){
    if(!(res && z))
       return ERR_NULL_PTR;
-   res->a = real(z);
-   res->b = -1 * img(z);
-   return SUCCESS;
+   ErrorCode errorCode = set_complex(res, real(z), -1 * img(z));
+   return errorCode;
 }
 
 double modulus(ComplexNbr *z){
