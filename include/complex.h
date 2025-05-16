@@ -27,11 +27,18 @@ ComplexNbr *new_complex(double a, double b);
 ComplexNbr *empty_complex(void);
 
 /**
+ * \brief Destroys a complex and free the memory.
+ * 
+ * \param z The complex to free.
+ */
+void free_complex(ComplexNbr *z);
+
+/**
  * \brief Gets the real part of a complex number.
  * 
  * \param z The complex number.
  * 
- * \return The real part of z.
+ * \return The real part of z (NaN if error).
  */
 double real(ComplexNbr *z);
 
@@ -40,14 +47,14 @@ double real(ComplexNbr *z);
  * 
  * \param z The complex number.
  * 
- * \return The imaginary part of z.
+ * \return The imaginary part of z (NaN if error).
  */
 double img(ComplexNbr *z);
 
 /**
  * \brief Adds two complex numbers.
  * 
- * \param res The address to write the result.
+ * \param res The address to write the result (z1 + z2).
  * \param z1 The first operand.
  * \param z2 The second operand.
  * 
@@ -58,7 +65,7 @@ ErrorCode add_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2);
 /**
  * \brief Subtracts two complex numbers.
  * 
- * \param res The address to write the result.
+ * \param res The address to write the result (z1 - z2).
  * \param z1 The first operand.
  * \param z2 The second operand.
  * 
@@ -69,12 +76,42 @@ ErrorCode sub_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2);
 /**
  * \brief Multiplies two complex numbers.
  * 
- * \param res The address to write the result.
+ * \param res The address to write the result (z1 * z2).
  * \param z1 The first operand.
  * \param z2 The second operand.
  * 
  * \return An ErrorCode. 
  */
 ErrorCode mul_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2);
+
+/**
+ * \brief Divides two complex numbers.
+ * 
+ * \param res The address to write the result (z1 / z2).
+ * \param z1 The first operand.
+ * \param z2 The second operand.
+ * 
+ * \return An ErrorCode. 
+ */
+ErrorCode div_complex(ComplexNbr *res, ComplexNbr *z1, ComplexNbr *z2);
+
+/**
+ * \brief Conjugates a complex number.
+ * 
+ * \param res The address to write the result (z*).
+ * \param z The complex to conjugate.
+ * 
+ * \return An ErrorCode. 
+ */
+ErrorCode conjugate(ComplexNbr *res, ComplexNbr *z);
+
+/**
+ * \brief Calculates the modulus of a complex number.
+ * 
+ * \param z The complex.
+ * 
+ * \return The modulus of z. (NaN if error). 
+ */
+double modulus(ComplexNbr *z);
 
 #endif
