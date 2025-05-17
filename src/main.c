@@ -8,6 +8,7 @@ by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit h
 */
 
 #include "raylib.h"
+#include "raymath.h"
 #include "../include/complex.h"
 #include <stdio.h>
 
@@ -17,13 +18,13 @@ int main ()
 {
    // Tell the window to use vsync and work on high DPI displays
    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-
    // Create the window and OpenGL context
    InitWindow(1280, 800, "Hello Raylib");
-   
+   printf("size = (%d,%d)\n", GetMonitorWidth(GetCurrentMonitor()), GetMonitorHeight(GetCurrentMonitor()));
    // game loop
    while (!WindowShouldClose())      // run the loop untill the user presses ESCAPE or presses the Close button on the window
    {
+      printf("winpos = (%d,%d)\n", (int)GetWindowPosition().x, (int)GetWindowPosition().y);
       // drawing
       BeginDrawing();
 
