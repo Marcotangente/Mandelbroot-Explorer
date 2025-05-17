@@ -7,4 +7,6 @@ typedef struct complex_plane_t ComplexPlane;
 
 ComplexPlane *new_complex_plane(void);
 
+void free_complex_plane(ComplexPlane *plane);
+
 #endif
