@@ -13,18 +13,13 @@
  * 
  */
 
-
-
 struct complex_plane_t{
-   int width;
-   int height;
+   int width; //pixels
+   int height; //pixels
    ComplexNbr *matrix;
 
-   double originRe;
-   double originIm;
-
-   double scaleRe;
-   double scaleIm;
+   ComplexNbr origin;
+   ComplexNbr scale;
 };
 
 ComplexPlane *new_complex_plane(int width, int height){
@@ -35,10 +30,8 @@ ComplexPlane *new_complex_plane(int width, int height){
    plane->width = width;
    plane->height = height;
 
-   plane->scaleRe = DEFAULT_SCALE_RE;
-   plane->scaleIm = DEFAULT_SCALE_IM;
-   plane->originRe = DEFAULT_ORIGIN_RE;
-   plane->originIm = DEFAULT_ORIGIN_IM;
+   plane->scale = (ComplexNbr){DEFAULT_SCALE_RE, DEFAULT_SCALE_IM};
+   plane->origin = (ComplexNbr){DEFAULT_ORIGIN_RE, DEFAULT_ORIGIN_IM};
 
    plane->matrix = malloc(sizeof(ComplexNbr) * width * height);
    if (!plane->matrix){
@@ -46,13 +39,27 @@ ComplexPlane *new_complex_plane(int width, int height){
       return NULL;
    }
 
-
-
    return plane;
 }
 
 void free_complex_plane(ComplexPlane *plane){
    if(plane){
+      free(plane->matrix);
       free(plane);
    }
+}
+
+ErrorCode update_matrix(ComplexPlane *plane){
+   if(!plane || !plane->matrix)
+      return ERR_NULL_PTR;
+
+   for(int i = 0; i < plane->width * plane->height; i++){
+      int x = i % plane->width;
+      int y = i / plane->width;
+      double re = plane->origin.re + x * plane->scale.re;
+      double im = plane->origin.im + y * plane->scale.im;
+      plane->matrix[i] = (ComplexNbr){re, im};
+   }
+
+   return SUCCESS;
 }
