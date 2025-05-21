@@ -17,8 +17,7 @@ ComplexNbr mul_complex(ComplexNbr z1, ComplexNbr z2){
 
 ComplexNbr div_complex(ComplexNbr z1, ComplexNbr z2){
    double z2Mod = modulus(z2);
-   ComplexNbr z2Conj = conjugate(z2);
-   ComplexNbr num = mul_complex(z1, z2Conj);
+   ComplexNbr num = mul_complex(z1, conjugate(z2));
    return (ComplexNbr){num.re/(z2Mod * z2Mod), num.im/(z2Mod * z2Mod)};
 }
 

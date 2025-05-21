@@ -8,6 +8,8 @@ typedef enum{
     SUCCESS,
     ERR_NULL_PTR,
     ERR_ALLOCATION_FAIL,
+    ERR_OUT_OF_BOUNDS,
+    ERR_INVALID_ARG,
 }ErrorCode;
 
 #endif
