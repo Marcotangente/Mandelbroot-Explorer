@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "raymath.h"
-#include "../include/complex.h"
+#include "../include/display.h"
+#include "../include/complex_plane.h"
 #include <stdio.h>
 #include "../include/resource_dir.h"   // utility header for SearchAndSetResourceDir
 
@@ -13,19 +14,29 @@ int main(void){
    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
    // Create the window and OpenGL context
    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME);
+
+   int screenWidth = GetMonitorWidth(0);
+   int screenHeight = GetMonitorHeight(0);
+
+   ComplexPlane *plane = new_complex_plane(screenWidth, screenHeight);
+   if(!plane){
+      CloseWindow();
+      return 1;
+   }
+
+   SetTargetFPS(20);
+
    // loop
    while (!WindowShouldClose())      // run the loop untill the user presses ESCAPE or presses the Close button on the window
    {
-      printf("winpos = (%d,%d)\n", (int)GetWindowPosition().x, (int)GetWindowPosition().y);
       // drawing
       BeginDrawing();
 
       // Setup the back buffer for drawing (clear color and depth buffers)
-      ClearBackground(BLACK);
+      ClearBackground(RAYWHITE);
 
-      // draw some text using the default font
-      DrawText("Hello Raylib", 200,200,20,WHITE);
-      
+      draw_mandelbrot(plane);
+
       // end the frame and get ready for the next one  (display frame, poll input, etc...)
       EndDrawing();
    }

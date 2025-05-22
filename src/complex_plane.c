@@ -1,10 +1,10 @@
 #include "../include/complex_plane.h"
 #include <stdlib.h>
 
-#define DEFAULT_SCALE_RE 1.0
-#define DEFAULT_SCALE_IM 1.0
-#define DEFAULT_ORIGIN_RE 0.0
-#define DEFAULT_ORIGIN_IM 0.0
+#define DEFAULT_SCALE_RE 0.0035
+#define DEFAULT_SCALE_IM 0.0035
+#define DEFAULT_ORIGIN_RE -2.5
+#define DEFAULT_ORIGIN_IM -1.5
 
 /* IDEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS
  * On alloue le plan complexe sur tout l'écran au lieu de la fenetre, ok c'est plus gros mais ça évite de le recalculer entièrement si on déplace la fenêtre et ça c'est cool
