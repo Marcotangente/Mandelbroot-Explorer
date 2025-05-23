@@ -24,27 +24,26 @@ int main(void){
       return 1;
    }
 
-   SetTargetFPS(20);
+   SetTargetFPS(60);
+   SetWindowState(FLAG_WINDOW_RESIZABLE);
+   RenderTexture2D fractalTexture = LoadRenderTexture(screenWidth, screenHeight);
+   render_mandelbrot_texture(plane, fractalTexture, MAX_ITERATION_DEFAULT);
 
-   // loop
    while (!WindowShouldClose())      // run the loop untill the user presses ESCAPE or presses the Close button on the window
    {
       // drawing
       BeginDrawing();
+      ClearBackground(RAYWHITE);     // Setup the back buffer for drawing (clear color and depth buffers)
 
-      // Setup the back buffer for drawing (clear color and depth buffers)
-      ClearBackground(RAYWHITE);
-
-      draw_mandelbrot(plane);
+      display_texture_view(fractalTexture);
 
       // end the frame and get ready for the next one  (display frame, poll input, etc...)
       EndDrawing();
    }
 
-   // cleanup
-
-
+   UnloadRenderTexture(fractalTexture);
    // destroy the window and cleanup the OpenGL context
    CloseWindow();
+   free_complex_plane(plane);
    return 0;
 }

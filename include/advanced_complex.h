@@ -6,10 +6,11 @@
 /**
  * \brief Returns the number of iterations before the Mandelbrot sequence diverges for a given complex number.
  * 
- * \param c The given complex
+ * \param c The complex number to test.
+ * \param maxIteration The maximum number of iterations to perform before assuming convergence.
  * 
- * \return The number of iteration if the seq. diverges. 0 otherwise.
+ * \return The number of iterations before divergence, or maxIteration if it does not diverge.
  */
-int mandelbrot_iteration(ComplexNbr c);
+int mandelbrot_iteration(ComplexNbr c, int maxIteration);
 
 #endif

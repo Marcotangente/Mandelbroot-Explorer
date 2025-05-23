@@ -3,6 +3,7 @@
 
 #define DEFAULT_WINDOW_WIDTH 800
 #define DEFAULT_WINDOW_HEIGHT 600
+#define MAX_ITERATION_DEFAULT 200
 
 typedef enum{
     SUCCESS,

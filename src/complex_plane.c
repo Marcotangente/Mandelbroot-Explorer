@@ -1,17 +1,12 @@
 #include "../include/complex_plane.h"
 #include <stdlib.h>
 
-#define DEFAULT_SCALE_RE 0.0035
-#define DEFAULT_SCALE_IM 0.0035
-#define DEFAULT_ORIGIN_RE -2.5
+#define DEFAULT_SCALE_RE 0.003
+#define DEFAULT_SCALE_IM 0.003
+#define DEFAULT_ORIGIN_RE -3
 #define DEFAULT_ORIGIN_IM -1.5
 
-/* IDEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS
- * On alloue le plan complexe sur tout l'écran au lieu de la fenetre, ok c'est plus gros mais ça évite de le recalculer entièrement si on déplace la fenêtre et ça c'est cool
- * Pour chopper un complexe il faudra donc non pas les coord sur la fenêtre mais sur l'écran : donc on utilise GetWindowPosition()
- * Aussi apparemment dessiner pixel par pixel c'est pas ouf https://search.brave.com/search?q=raylib+draw+pixel+slow&source=desktop&summary=1&conversation=1bac6319b2d49cb879baa6
- * 
- */
+// STRUCT
 
 struct complex_plane_t{
    int width; //pixels
@@ -22,6 +17,19 @@ struct complex_plane_t{
    double scaleRe;
    double scaleIm;
 };
+
+// PROTOTYPE
+
+/**
+ * \brief Recomputes the complex number matrix of the plane.
+ * 
+ * \param plane A pointer to the complex plane to update.
+ * 
+ * \return An ErrorCode indicating success or the type of failure.
+ */
+static ErrorCode recalculate_complex_matrix(ComplexPlane *plane);
+
+// FUNCTIONS
 
 ComplexPlane *new_complex_plane(int width, int height){
    ComplexPlane *plane = malloc(sizeof(ComplexPlane));
@@ -71,21 +79,6 @@ bool is_in_bounds(ComplexPlane *plane, int x, int y){
    return true;
 }
 
-ErrorCode recalculate_complex_matrix(ComplexPlane *plane){
-   if(!plane || !plane->matrix)
-      return ERR_NULL_PTR;
-
-   for(int i = 0; i < plane->width * plane->height; i++){
-      int x = i % plane->width;
-      int y = i / plane->width;
-      double re = plane->origin.re + x * plane->scaleRe;
-      double im = plane->origin.im + y * plane->scaleIm;
-      plane->matrix[i] = (ComplexNbr){re, im};
-   }
-
-   return SUCCESS;
-}
-
 ErrorCode zoom_plane(ComplexPlane *plane, double factor, int centerX, int centerY){
    if(!plane)
       return ERR_NULL_PTR;
@@ -127,4 +120,21 @@ ErrorCode set_plane_scale(ComplexPlane *plane, double scaleRe, double scaleIm){
    plane->scaleRe = scaleRe;
    plane->scaleIm = scaleIm;
    return recalculate_complex_matrix(plane);
+}
+
+// STATIC FUNCTIONS
+
+static ErrorCode recalculate_complex_matrix(ComplexPlane *plane){
+   if(!plane || !plane->matrix)
+      return ERR_NULL_PTR;
+
+   for(int i = 0; i < plane->width * plane->height; i++){
+      int x = i % plane->width;
+      int y = i / plane->width;
+      double re = plane->origin.re + x * plane->scaleRe;
+      double im = plane->origin.im + y * plane->scaleIm;
+      plane->matrix[i] = (ComplexNbr){re, im};
+   }
+
+   return SUCCESS;
 }

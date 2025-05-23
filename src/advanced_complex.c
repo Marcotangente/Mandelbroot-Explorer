@@ -1,15 +1,13 @@
 #include "../include/advanced_complex.h"
 
-#define MAX_ITER 200
-
-int mandelbrot_iteration(ComplexNbr c){
+int mandelbrot_iteration(ComplexNbr c, int maxIteration){
    ComplexNbr z = {0.0, 0.0};
-   unsigned int iterationCount = 0;
-   while(iterationCount < MAX_ITER){
+   int iterationCount = 0;
+   while(iterationCount < maxIteration){
       if(modulus(z) > 2)
          return iterationCount;
       z = add_complex(mul_complex(z, z), c);
       iterationCount++;
    }
-   return 0;
+   return maxIteration;
 }

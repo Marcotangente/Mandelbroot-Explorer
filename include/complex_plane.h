@@ -46,15 +46,6 @@ ComplexNbr get_complex_at(ComplexPlane *plane, int x, int y);
 bool is_in_bounds(ComplexPlane *plane, int x, int y);
 
 /**
- * \brief Recomputes the complex number matrix of the plane.
- * 
- * \param plane A pointer to the complex plane to update.
- * 
- * \return An ErrorCode indicating success or the type of failure.
- */
-ErrorCode recalculate_complex_matrix(ComplexPlane *plane);
-
-/**
  * \brief Applies a zoom transformation to the complex plane.
  * 
  * \param plane A pointer to the complex plane.
