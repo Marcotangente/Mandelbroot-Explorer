@@ -60,7 +60,7 @@ void display_texture_view(RenderTexture2D texture){
 // STATIC FUNCTIONS
 
 static Color iteration_to_color(int iter, int maxIteration){
-   if(!iter)
+   if(iter == maxIteration)
       return BLACK;
 
    float t = (float)iter / maxIteration;

@@ -4,7 +4,7 @@
 #define DEFAULT_SCALE_RE 0.003
 #define DEFAULT_SCALE_IM 0.003
 #define DEFAULT_ORIGIN_RE -3
-#define DEFAULT_ORIGIN_IM -1.5
+#define DEFAULT_ORIGIN_IM 1.5
 
 // STRUCT
 
@@ -92,7 +92,7 @@ ErrorCode zoom_plane(ComplexPlane *plane, double factor, int centerX, int center
    plane->scaleRe /= factor;
    plane->scaleIm /= factor;
 
-   plane->origin = (ComplexNbr){centerComplex.re - centerX * plane->scaleRe, centerComplex.im - centerY * plane->scaleIm};
+   plane->origin = (ComplexNbr){centerComplex.re - centerX * plane->scaleRe, centerComplex.im + centerY * plane->scaleIm};
 
    return recalculate_complex_matrix(plane);
 }
@@ -101,7 +101,7 @@ ErrorCode translate_plane(ComplexPlane *plane, int offsetX, int offsetY){
    if(!plane)
       return ERR_NULL_PTR;
 
-   ComplexNbr offsetComplex = {offsetX * plane->scaleRe, offsetY * plane->scaleIm};
+   ComplexNbr offsetComplex = {offsetX * plane->scaleRe, -offsetY * plane->scaleIm};
    plane->origin = add_complex(plane->origin, offsetComplex);
 
    return recalculate_complex_matrix(plane);
@@ -132,7 +132,7 @@ static ErrorCode recalculate_complex_matrix(ComplexPlane *plane){
       int x = i % plane->width;
       int y = i / plane->width;
       double re = plane->origin.re + x * plane->scaleRe;
-      double im = plane->origin.im + y * plane->scaleIm;
+      double im = plane->origin.im - y * plane->scaleIm;
       plane->matrix[i] = (ComplexNbr){re, im};
    }
 

@@ -7,7 +7,8 @@
 
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 800
-#define WINDOW_NAME "Mandelbrot Visualizer 🔮"
+#define WINDOW_NAME "Mandelbrot Visualizer"
+#define MOVE_COOLDOWN 0.1
 
 int main(void){
    // Tell the window to use vsync and work on high DPI displays
@@ -24,13 +25,54 @@ int main(void){
       return 1;
    }
 
-   SetTargetFPS(60);
+   int maxIter = MAX_ITERATION_DEFAULT;
+   double lastMoveTime = 0.0;
+
+   SetTargetFPS(30);
    SetWindowState(FLAG_WINDOW_RESIZABLE);
    RenderTexture2D fractalTexture = LoadRenderTexture(screenWidth, screenHeight);
-   render_mandelbrot_texture(plane, fractalTexture, MAX_ITERATION_DEFAULT);
+   render_mandelbrot_texture(plane, fractalTexture, maxIter);
+
 
    while (!WindowShouldClose())      // run the loop untill the user presses ESCAPE or presses the Close button on the window
    {
+      double now = GetTime();
+      if(now - lastMoveTime >= MOVE_COOLDOWN){
+         bool moved = false;
+         if(IsKeyDown(KEY_RIGHT)){
+            translate_plane(plane, -20, 0);
+            moved = true;
+         }
+         if(IsKeyDown(KEY_LEFT)){
+            translate_plane(plane, 20, 0);
+            moved = true;
+         }
+         if(IsKeyDown(KEY_UP)){
+            translate_plane(plane, 0, 20);
+            moved = true;
+         }
+         if(IsKeyDown(KEY_DOWN)){
+            translate_plane(plane, 0, -20);
+            moved = true;
+         }
+         if(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+            Vector2 mousePos = GetMousePosition();
+            zoom_plane(plane, 2.0, mousePos.x, mousePos.y);
+            moved = true;
+         }
+         if(IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)){
+            Vector2 mousePos = GetMousePosition();
+            zoom_plane(plane, 0.5, mousePos.x, mousePos.y);
+            moved = true;
+         }
+
+         if(moved){
+            render_mandelbrot_texture(plane, fractalTexture, maxIter);
+            lastMoveTime = now;
+         }
+      }
+
+
       // drawing
       BeginDrawing();
       ClearBackground(RAYWHITE);     // Setup the back buffer for drawing (clear color and depth buffers)
